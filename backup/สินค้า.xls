@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="http://www.w3.org/TR/REC-html40">
+<Worksheet ss:Name="สินค้า">
+<Table>
+<Row>
+<Cell><Data ss:Type="String">ID</Data></Cell>
+<Cell><Data ss:Type="String">Code</Data></Cell>
+<Cell><Data ss:Type="String">Name</Data></Cell>
+<Cell><Data ss:Type="String">Name [English]</Data></Cell>
+<Cell><Data ss:Type="String">Cost</Data></Cell>
+<Cell><Data ss:Type="String">Price</Data></Cell>
+<Cell><Data ss:Type="String">Description</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+<Cell><Data ss:Type="String">KFB-S018</Data></Cell>
+<Cell><Data ss:Type="String">เสื้อกีฬา</Data></Cell>
+<Cell><Data ss:Type="String">sport shirt</Data></Cell>
+<Cell><Data ss:Type="Number">0.00</Data></Cell>
+<Cell><Data ss:Type="Number">0.00</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2</Data></Cell>
+<Cell><Data ss:Type="String">KFB-S019</Data></Cell>
+<Cell><Data ss:Type="String">เสื้อกีฬาxx</Data></Cell>
+<Cell><Data ss:Type="String">sportxx</Data></Cell>
+<Cell><Data ss:Type="Number">100.00</Data></Cell>
+<Cell><Data ss:Type="Number">165.00</Data></Cell>
+<Cell><Data ss:Type="String">xxxxxxx</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3</Data></Cell>
+<Cell><Data ss:Type="String">KFB-S052</Data></Cell>
+<Cell><Data ss:Type="String">เสื้อกีฬาพิมพ์ลาย</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="Number">100.15</Data></Cell>
+<Cell><Data ss:Type="Number">365.00</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">4</Data></Cell>
+<Cell><Data ss:Type="String">KFB-S020</Data></Cell>
+<Cell><Data ss:Type="String">เสื้อยืด</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="Number">100.00</Data></Cell>
+<Cell><Data ss:Type="Number">300.00</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">5</Data></Cell>
+<Cell><Data ss:Type="String">KFB-S021</Data></Cell>
+<Cell><Data ss:Type="String">เสื้อเก่าพิมพ์ลาย</Data></Cell>
+<Cell><Data ss:Type="String">เสื้อเก่าพิมพ์ลาย</Data></Cell>
+<Cell><Data ss:Type="Number">90.00</Data></Cell>
+<Cell><Data ss:Type="Number">200.00</Data></Cell>
+<Cell><Data ss:Type="String">เสื้อเก่าคลาสสิค ราคาแพง</Data></Cell>
+</Row>
+</Table>
+</Worksheet>
+</Workbook>
