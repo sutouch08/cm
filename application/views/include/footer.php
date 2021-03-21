@@ -1,4 +1,4 @@
-<!-- PAGE CONTENT ENDS --> 
+<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
@@ -14,7 +14,7 @@
 							&copy; Covenant Co., Ltd.
 						</span>
 
-						
+
 					</div>
 
 					<!-- /section:basics/footer -->
@@ -27,7 +27,7 @@
 		</div><!-- /.main-container -->
 
 		<div id="loader" style="position:absolute; padding: 15px 25px 15px 25px; background-color:#fff; opacity:0.0; box-shadow: 0px 0px 25px #CCC; top:-20px; display:none;">
-        <center><i class="fa fa-spinner fa-5x fa-spin blue"></i></center><center>กำลังทำงาน....</center></div> 
+        <center><i class="fa fa-spinner fa-5x fa-spin blue"></i></center><center>กำลังทำงาน....</center></div>
 
 		<!-- page specific plugin scripts -->
 
@@ -41,7 +41,7 @@
 		<script src="<?php echo base_url(); ?>assets/js/ace/elements.typeahead.js"></script>
 		<script src="<?php echo base_url(); ?>assets/js/ace/elements.wysiwyg.js"></script>
 		<script src="<?php echo base_url(); ?>assets/js/ace/elements.spinner.js"></script>
-        
+
 		<script src="<?php echo base_url(); ?>assets/js/ace/elements.treeview.js"></script>
 		<script src="<?php echo base_url(); ?>assets/js/ace/elements.wizard.js"></script>
 		<script src="<?php echo base_url(); ?>assets/js/ace/elements.aside.js"></script>
@@ -58,31 +58,31 @@
 		<script src="<?php echo base_url(); ?>assets/js/ace/ace.widget-on-reload.js"></script>
 		<script src="<?php echo base_url(); ?>assets/js/ace/ace.searchbox-autocomplete.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/jquery.cookie.js"></script>
-        
+
 
 		<!-- inline scripts related to this page -->
-<script>  
+<script>
 function load_in(){
 	var x = ($(document).innerWidth()/2)-50;
 	$("#loader").css("display","");
 	$("#loader").css("left",x);
-	$("#loader").animate({opacity:0.8, top:300},300);		
+	$("#loader").animate({opacity:0.8, top:300},300);
 }
 function load_out(){
 	$("#loader").animate({opacity:0, top:-20},300, function(){ $("#loader").css("display","none");});
-}   
+}
 
 function isDate(txtDate){
 	  var currVal = txtDate;
 	  if(currVal == '')
-	    return false;  
-	  //Declare Regex 
+	    return false;
+	  //Declare Regex
 	  var rxDatePattern = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
 	  var dtArray = currVal.match(rxDatePattern); // is format OK?
 	  if (dtArray == null){
 		     return false;
 	  }
-	  //Checks for mm/dd/yyyy format.	  
+	  //Checks for mm/dd/yyyy format.
 	  dtDay= dtArray[1];
 	  dtMonth = dtArray[3];
 	  dtYear = dtArray[5];
@@ -112,7 +112,7 @@ function checkerror(){
 		var mess = $("#info").val();
 		swal({ title: "สำเร็จ", text: mess, html : true, type: "success"});
 	}
-}  
+}
 
 //**************  Handlebars.js  **********************//
 function render(source, data, output){
@@ -161,6 +161,15 @@ function finished_download()
 	window.clearInterval(downloadTimer);
 	$.post("<?php echo base_url(); ?>admin/tool/finished_download");
 	load_out();
+}
+
+function isJson(str){
+	try{
+		JSON.parse(str);
+	}catch(e){
+		return false;
+	}
+	return true;
 }
 
 </script>

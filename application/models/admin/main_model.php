@@ -1,7 +1,7 @@
 <?php
 class Main_model extends CI_Model
 {
-	
+
 public function __construct()
 {
 	parent:: __construct();
@@ -9,23 +9,36 @@ public function __construct()
 
 public function get_data($id="", $perpage="", $limit ="")
 {
-	if($id !=""){
+	if($id !="")
+	{
 		$rs = $this->db->get_where("tbl_check", array("id_check"=>$id), 1);
-		if($rs->num_rows() == 1){
+
+		if($rs->num_rows() == 1)
+		{
 			return $rs->row();
-		}else{
+		}
+		else
+		{
 			return false;
 		}
-	}else{
+
+	}
+	else
+	{
 		$this->db->order_by("date_open","desc");
 		$rs = $this->db->limit($perpage, $limit)->get("tbl_check");
-		if($rs->num_rows() >0 ){
+		if($rs->num_rows() >0 )
+		{
 			return $rs->result();
-		}else{
+		}
+		else
+		{
 			return false;
 		}
 	}
 }
+
+
 
 public function get_search_data($txt, $filter, $from ="", $to ="", $perpage ="", $limit ="")
 {
@@ -49,6 +62,8 @@ public function get_search_data($txt, $filter, $from ="", $to ="", $perpage ="",
 	}
 }
 
+
+
 public function count_row($txt = "", $filter="", $from = "", $to = "")
 {
 	if($txt != "")
@@ -68,36 +83,54 @@ public function count_row($txt = "", $filter="", $from = "", $to = "")
 	}
 	else
 	{
-		$rs = $this->db->get("tbl_check");	
+		$rs = $this->db->get("tbl_check");
 	}
 	return $rs->num_rows();
 }
 
+
+
+
 public function add_new_check($data)
 {
-	return $this->db->insert("tbl_check", $data);	
+	return $this->db->insert("tbl_check", $data);
 }
+
+
 
 public function set_import($id, $val)
 {
-	return $this->db->set("import", $val)->where("id_check", $id)->update("tbl_check");	
+	return $this->db->set("import", $val)->where("id_check", $id)->update("tbl_check");
 }
+
+
+public function set_import_detail($id, $val)
+{
+	return $this->db->set('import_detail', $val)->where('id_check', $id)->update('tbl_check');
+}
+
 
 public function validate_multi_check()
 {
 	$rs = $this->db->select("id_check")->where("pause", 0)->get("tbl_check");
-	return $rs->num_rows();	
+	return $rs->num_rows();
 }
+
+
 
 public function pause($id, $data)
 {
-	return $this->db->where("id_check", $id)->update("tbl_check", $data);	
+	return $this->db->where("id_check", $id)->update("tbl_check", $data);
 }
+
+
 
 public function continue_check($id, $data)
 {
-	return $this->db->where("id_check", $id)->update("tbl_check", $data);	
+	return $this->db->where("id_check", $id)->update("tbl_check", $data);
 }
+
+
 public function location_code($id)
 {
 	$rs = $this->db->select("location_code")	->where("id_check", $id)->get("tbl_check");
@@ -111,24 +144,54 @@ public function location_code($id)
 	}
 }
 
+
+public function add_file($ds = array())
+{
+	if(!empty($ds))
+	{
+		if($this->db->insert('tbl_import_detail_file', $ds))
+		{
+			return $this->db->insert_id();
+		}
+	}
+
+	return FALSE;
+}
+
+
+public function add_non_item($ds = array())
+{
+	return $this->db->insert('tbl_import_checked_failed', $ds);
+}
+
+
+public function add_checked_detail($ds = array())
+{
+	return $this->db->insert('tbl_check_detail', $ds);
+}
+
 public function import_item($data)
 {
-	return $this->db->insert("tbl_items_import", $data);	
+	return $this->db->insert("tbl_items_import", $data);
 }
+
+
 
 public function delete_imported_items($id)
 {
 	return $this->db->where("id_check", $id)->delete("tbl_items_import");
 }
 
+
+
 public function update_import_item($id, $data)
 {
-	return $this->db->where("id", $id)->update("tbl_items_import", $data);	
+	return $this->db->where("id", $id)->update("tbl_items_import", $data);
 }
 
 public function update_check($id, $data)
 {
-	return $this->db->where("id_check", $id)->update("tbl_check", $data);	
+	return $this->db->where("id_check", $id)->update("tbl_check", $data);
 }
 
 public function isExists($barcode, $id)
@@ -146,25 +209,25 @@ public function isExists($barcode, $id)
 
 public function isPause($id)
 {
-	$rs = $this->db->select("pause")->where("id_check", $id)->get("tbl_check");	
+	$rs = $this->db->select("pause")->where("id_check", $id)->get("tbl_check");
 	if($rs->num_rows() == 1)
 	{
 		return $rs->row()->pause;
 	}
 	else
 	{
-		return 0;	
+		return 0;
 	}
 }
 
 public function close_check($id)
 {
-	return $this->db->where("id_check", $id)->update("tbl_check", array("status" =>'1', "date_close"=>NOW() ) );	
+	return $this->db->where("id_check", $id)->update("tbl_check", array("status" =>'1', "date_close"=>NOW() ) );
 }
 
 public function open_check($id)
 {
-	return $this->db->where("id_check", $id)->update("tbl_check", array("status"=>'0', "date_close" => NULL));	
+	return $this->db->where("id_check", $id)->update("tbl_check", array("status"=>'0', "date_close" => NULL));
 }
 
 public function deleteChecked($id)
@@ -176,12 +239,27 @@ public function deleteChecked($id)
 	$this->db->trans_complete();
 	if($this->db->trans_status() === false)
 	{
-		return false;	
+		return false;
 	}
 	else
 	{
 		return true;
-	}		
+	}
 }
+
+
+public function delete_import_checked_detail($id_check, $id_file)
+{
+	return $this->db->where('id_check', $id_check)->where('id_file', $id_file)->delete('tbl_check_detail');
+}
+
+
+public function delete_imported_checked_file($id_file)
+{
+	return $this->db->where('id', $id_file)->delete('tbl_import_detail_file');
+}
+
+
+
 }/// end class
 ?>

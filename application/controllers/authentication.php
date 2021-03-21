@@ -7,12 +7,12 @@ class Authentication extends CI_Controller
 		parent::__construct();
 		$this->home = base_url()."authentication";
 	}
-	
+
 	public function index()
 	{
 		$this->load->view("login");
 	}
-	
+
 	public function validate_credentials()
 	{
 		$this->load->model("login_model");
@@ -26,9 +26,13 @@ class Authentication extends CI_Controller
 				"user_name"=>"super admin",
 				"id_profile"=>0
 			);
+
 			$this->session->set_userdata($data);
+
 			redirect(base_url()."index");
-		}else if($rs == true)
+
+		}
+		else if($rs == true)
 		{
 			$ro = $this->login_model->get_profile($rs->id_user);
 			$ra = $this->db->select("first_name")->where("id_employee", $rs->id_employee)->get("tbl_employee");
@@ -41,11 +45,13 @@ class Authentication extends CI_Controller
 			);
 			$this->session->set_userdata($data);
 			redirect(base_url());
-		}else{
+		}
+		else
+		{
 			redirect($this->home);
 		}
 	}
-	
+
 	public function logout()
 	{
 		$this->session->unset_userdata("id_user");
@@ -53,9 +59,9 @@ class Authentication extends CI_Controller
 		$this->session->unset_userdata("employee");
 		$this->session->unset_userdata("user_name");
 		$this->session->unset_userdata("id_profile");
-		redirect($this->home);	
+		redirect($this->home);
 	}
-	
+
 }
 
 ?>

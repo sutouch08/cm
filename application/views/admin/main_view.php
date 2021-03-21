@@ -27,11 +27,11 @@
             <option value="subject" <?php echo isSelected("subject", $filter); ?>>หัวข้อ</option>
             <option value="location" <?php echo isSelected("location", $filter); ?>>สถานที่</option>
             <option value="employee" <?php echo isSelected("employee", $filter); ?>>พนักงาน</option>
-        </select>   
+        </select>
     </div>
     <div class="col-lg-3 col-md-3 col-sm-6">
         <label >คำค้น</label>
-        <input type="text" id="search_text" name="search_text" placeholder="ระบุรายการค้นหา" class="form-control input-sm" value="<?php echo $search_text; ?>" autofocus />  
+        <input type="text" id="search_text" name="search_text" placeholder="ระบุรายการค้นหา" class="form-control input-sm" value="<?php echo $search_text; ?>" autofocus />
     </div>
     <div class="col-lg-2 col-md-2 col-sm-4">
         <label>จากวันที่</label>
@@ -39,7 +39,7 @@
     </div>
     <div class="col-lg-2 col-md-2 col-sm-4">
         <label >ถึงวันที่</label>
-        <input type="text" id="to_date" name="to_date" class="form-control input-sm" value="<?php echo $to_date; ?>" />  
+        <input type="text" id="to_date" name="to_date" class="form-control input-sm" value="<?php echo $to_date; ?>" />
     </div>
 	</form>
     <div class="col-lg-1 col-md-2 col-sm-4">
@@ -139,7 +139,7 @@
                             <button type="button" class="btn btn-minier btn-warning" id="btn_pause_<?php echo $id; ?>" onclick="check(<?php echo $id; ?>)" style="display:none;"><i class="fa fa-pause"></i></button>
                        <?php elseif( $rs->pause == 1 ) : ?>
                             <button type="button" class="btn btn-minier btn-success" id="btn_check_<?php echo $id; ?>" onclick="pause(<?php echo $id; ?>)" style="display:none;"><i class="fa fa-check"></i></button>
-                            <button type="button" class="btn btn-minier btn-warning"  id="btn_pause_<?php echo $id; ?>" onclick="check(<?php echo $id; ?>)"><i class="fa fa-pause"></i></button>              
+                            <button type="button" class="btn btn-minier btn-warning"  id="btn_pause_<?php echo $id; ?>" onclick="check(<?php echo $id; ?>)"><i class="fa fa-pause"></i></button>
                        <?php endif; ?>
                   <?php else : ?>
                   			<button type="button" class="btn btn-minier btn-danger"><i class="fa fa-stop"></i></button>
@@ -155,25 +155,35 @@
                     <button class="btn btn-primary btn-minier btn-white dropdown-toggle" aria-expanded="false" data-toggle="dropdown">คำสั่ง &nbsp;<i class="face-icon fa fa-angle-down icon-on-right"></i></button>
                     	<ul class="dropdown-menu dropdown-menu-right">
                         	<li><a href="javascript:void(0)" onclick="select_file(<?php echo $id; ?>)" ><i class="fa fa-upload"></i> &nbsp; นำเข้ายอดตั้งต้น</a></li>
-                            <li><a href="javascript:void(0)" onclick="delete_imported(<?php echo $id; ?>)"><i class="fa fa-trash"></i> &nbsp; ลบรายการนำเข้า</a></li>
-                            
-                           <?php if($edit && !$rs->status) : ?>
-                           <li id="btn_close<?php echo $id; ?>" ><a href="javascript:void(0)" onclick="close_check(<?php echo $id; ?>)"><i class="fa fa-close"></i>&nbsp; ปิดการตรวจนับ</a></li> 
-						   <?php endif; ?>
-                           
-                           <?php if($edit && $rs->status) : ?>
-                           <li id="btn_open<?php echo $id; ?>"><a href="javascript:void(0)" onclick="open_check(<?php echo $id; ?>)"><i class="fa fa-check"></i>&nbsp; เปิดการตรวจนับ</a></li>
-						   <?php endif; ?>
-                           
-                           <li class="divider" id="divider<?php echo $id; ?>"></li>
-                           
-                           <?php if($edit) : ?> 
-                           <li><a href="javascript:void(0)" id="btn_edit<?php echo $id; ?>" onclick="edit_row(<?php echo $id; ?>)"><i class="fa fa-pencil"></i>&nbsp; แก้ไขรายการ</a></li> 
-						   <?php endif; ?>
-                           
-                    	   <?php if($delete) : ?> 
-                           <li><a href="javascript:void(0)" onclick="confirm_delete(<?php echo $id; ?>)"><i class="fa fa-trash"></i>&nbsp; ลบการตรวจนับ</a></li> 
-						   <?php endif; ?>
+                          <li><a href="javascript:void(0)" onclick="delete_imported(<?php echo $id; ?>)"><i class="fa fa-trash"></i> &nbsp; ลบยอดตั้งต้น</a></li>
+
+
+
+
+
+												<?php if($edit && $rs->status == 0) : ?>
+													<li class="divider" id="divider<?php echo $id; ?>"></li>
+													<li><a href="javascript:void(0)" onclick="select_import_checked_file(<?php echo $id; ?>)"><i class="fa fa-upload"></i> &nbsp; นำเข้ายอดตรวจนับ</a></li>
+													<li><a href="javascript:void(0)" onclick="select_imported_list(<?php echo $id; ?>)"><i class="fa fa-trash"></i> &nbsp; ลบยอดตรวจนับ</a></li>
+												<?php endif; ?>
+
+
+
+												<li class="divider" id="divider<?php echo $id; ?>"></li>
+												<?php if($edit) : ?>
+												<li><a href="javascript:void(0)" id="btn_edit<?php echo $id; ?>" onclick="edit_row(<?php echo $id; ?>)"><i class="fa fa-pencil"></i>&nbsp; แก้ไขการตรวจนับ</a></li>
+											 <?php endif; ?>
+												<?php if($edit && !$rs->status) : ?>
+												<li id="btn_close<?php echo $id; ?>" ><a href="javascript:void(0)" onclick="close_check(<?php echo $id; ?>)"><i class="fa fa-close"></i>&nbsp; ปิดการตรวจนับ</a></li>
+												<?php endif; ?>
+
+												<?php if($edit && $rs->status) : ?>
+												<li id="btn_open<?php echo $id; ?>"><a href="javascript:void(0)" onclick="open_check(<?php echo $id; ?>)"><i class="fa fa-check"></i>&nbsp; เปิดการตรวจนับ</a></li>
+												 <?php endif; ?>
+
+                    	   <?php if($delete) : ?>
+                           <li><a href="javascript:void(0)" onclick="confirm_delete(<?php echo $id; ?>)"><i class="fa fa-trash"></i>&nbsp; ลบการตรวจนับ</a></li>
+						   			 			<?php endif; ?>
                         </ul>
                     </div>
                     </td>
@@ -187,7 +197,7 @@
 </div><!-- End col-lg-12 -->
 </div><!-- End row -->
 
-<!------------------------------------------------- Modal  Import file ----------------------------------------------------------->
+<!--- Modal  Import file ----->
 <div class='modal fade' id='import_modal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
 	<div class='modal-dialog' style='width:500px;'>
 		<div class='modal-content'>
@@ -195,13 +205,13 @@
 			<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
 			<h4 class='modal-title' id='myModalLabel'>นำเข้าไฟล์รายการสินค้าตั้งต้น</h4>
 		  </div>
-		  <div class='modal-body' id="import_body">      
+		  <div class='modal-body' id="import_body">
           <form id="myform" action="<?php echo $this->home; ?>/import_items" method="post" enctype="multipart/form-data">
             <div class="row">
             <div class="form-group">
             <div class="col-lg-8 col-md-8 col-sm-6">
                 <!-- #section:custom/file-input -->
-                    <input id="user_file" type="file" name="user_file" class="input-sm"> 
+                    <input id="user_file" type="file" name="user_file" class="input-sm">
                     <input type="hidden" id="id_check" name="id_check" />
             </div>
             <div class="col-lg-4 col-md-4 col-sm-6">
@@ -214,9 +224,38 @@
 		</div>
 	</div>
 </div>
-<!------------------------------------------------- END Modal  ----------------------------------------------------------->
+<!-- END Modal  -->
 
-<!------------------------------------------------- Modal  Edit ----------------------------------------------------------->
+<!--- Modal  Import file ----->
+<div class='modal fade' id='import_checked_modal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+	<div class='modal-dialog' style='width:500px;'>
+		<div class='modal-content'>
+		  <div class='modal-header'>
+			<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+			<h4 class='modal-title'>นำเข้ายอดตรวจนับ</h4>
+		  </div>
+		  <div class='modal-body'>
+          <form id="importForm" action="<?php echo $this->home; ?>/import_checked" method="post" enctype="multipart/form-data">
+            <div class="row">
+            <div class="form-group">
+            <div class="col-lg-8 col-md-8 col-sm-6">
+                <!-- #section:custom/file-input -->
+                    <input id="checkedFile" type="file" name="checkedFile" class="input-sm">
+                    <input type="hidden" id="idCheck" name="idCheck" />
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6">
+                <button type="button" class="btn btn-success btn-xs btn-block" onclick="uploadChecked()" ><i class="fa fa-upload"></i>&nbsp; นำเข้า</button>
+            </div>
+            </div>
+            </div><!--/ Row -->
+            </form>
+          </div><!--- modal-body -->
+		</div>
+	</div>
+</div>
+<!-- END Modal  -->
+
+<!--- Modal  Edit -->
 <div class='modal fade' id='edit_modal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
 	<div class='modal-dialog' style='width:500px;'>
 		<div class='modal-content'>
@@ -224,7 +263,7 @@
 			<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
 			<h4 class='modal-title' id='myModalLabel'>แก้ไขรายการ</h4>
 		  </div>
-		  <div class='modal-body' id="edit_body">      
+		  <div class='modal-body' id="edit_body">
           <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom:10px;">
                 <label >สถานที่ตรวจนับ</label>
@@ -232,7 +271,7 @@
                     <option value="">เลือกสถานที่</option>
                     <?php echo select_location(); ?>
                 </select>
-            </div>  
+            </div>
             <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom:10px;">
                 <label >หัวข้อการตรวจนับ</label>
                 <input type="text" id="edit_subject" name="edit_subject" class="form-control input-sm" placeholder="ระบุหัวข้อการตรวจนับ เช่น ครั้งที่ 1/2559" />
@@ -241,22 +280,176 @@
                 <label for="detail">หมายเหตุ</label>
                 <input type="text" id="edit_remark" class="form-control input-sm" placeholder="ระบุหมายเหตุ (ถ้ามี)" />
             </div>
-            
+
             <?php if($edit) : ?>
             <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom:10px;">
                 <label for="btn_save">&nbsp;</label>
                 <button type="button" id="btn_save" onclick="edit_check()" class="btn btn-success btn-xs btn-block"><i class="fa fa-save"></i>&nbsp; บันทึก</button>
             </div>
-            <?php endif; ?>    
+            <?php endif; ?>
             <input type="hidden" name="edit_id_check" id="edit_id_check" />
             </div><!--/ Row -->
           </div><!--- modal-body -->
 		</div>
 	</div>
 </div>
-<!------------------------------------------------- END Modal  ----------------------------------------------------------->
+<!--- END Modal  -->
+
+<!--- Modal delete Import checked file ----->
+<div class='modal fade' id='imported_list_modal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+	<div class='modal-dialog' style='width:600px;'>
+		<div class='modal-content'>
+		  <div class='modal-header'>
+			<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+			<h4 class='modal-title'>ลบยอดตรวจนับ</h4>
+		  </div>
+		  <div class='modal-body'>
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table">
+	          	<thead>
+	          		<tr>
+	          			<th class="width-5 text-center"></th>
+									<th class="width-40">ชื่อไฟล์</th>
+									<th class="width-25">ผู้นำเข้า</th>
+									<th class="width-30">วันที่นำเข้า</th>
+	          		</tr>
+	          	</thead>
+							<tbody id="imported_file_list"></tbody>
+	          </table>
+					</div>
+					<div class="col-sm-12 text-right">
+						<button type="button" class="btn btn-sm btn-danger" onclick="removeSelectFiles()">ลบรายการที่เลือก</button>
+					</div>
+				</div>
+
+					<input type="hidden" id="deleteIdCheck" value="" />
+      </div><!--- modal-body -->
+		</div>
+	</div>
+</div>
+<!-- END Modal  -->
+
+<script id="file_list_template" type="text/x-handlebarsTemplate">
+{{#each this}}
+	{{#if nodata}}
+		<tr><td colspan="4" class="text-center">--- ไม่พบไฟล์นำเข้า ---</td></tr>
+	{{else}}
+	<tr>
+		<td>
+			<label>
+				<input type="checkbox" class="ace chk" id="chk-{{id_file}}" value="{{id_file}}" />
+				<span class="lbl"></span>
+			</label>
+		</td>
+		<td>{{file_name}}</td>
+		<td>{{emp_name}}</td>
+		<td>{{date_upd}}</td>
+	</tr>
+	{{/if}}
+{{/each}}
+</script>
 
 <script>
+function removeSelectFiles() {
+	var id = $('#deleteIdCheck').val();
+	var data = [];
+	$('.chk').each(function() {
+		if($(this).is(':checked')) {
+			data.push($(this).val());
+		}
+	})
+
+	if(data.length > 0) {
+
+		$('#imported_list_modal').modal('hide');
+
+		load_in();
+
+		$.ajax({
+			url:'<?php echo $this->home; ?>/delete_selected_file',
+			type:'POST',
+			cache:false,
+			data:{
+				'id_check' : id,
+				'select_files' : data
+			},
+			success:function(rs) {
+				load_out();
+				var rs = $.trim(rs);
+				if(rs === 'success') {
+					swal({
+						title:'Success',
+						type:'success',
+						timer:1500
+					});
+				}
+				else {
+					swal({
+						title:'Error',
+						text:rs,
+						type:'error'
+					});
+				}
+			},
+			error:function(xhr, status, error) {
+				load_out();
+				swal({
+					title:'Error!',
+					text:xhr.responseText,
+					type:'error'
+				})
+			}
+		})
+	}
+}
+
+
+function select_imported_list(id) {
+	$('#deleteIdCheck').val(id);
+
+	load_in();
+
+	$.ajax({
+		url:"<?php echo $this->home; ?>/get_import_file_list",
+		type:'GET',
+		cache:false,
+		data:{
+			"id_check" : id
+		},
+		success:function(rs) {
+			load_out();
+			var rs = $.trim(rs);
+			if(isJson(rs)) {
+				var ds = $.parseJSON(rs);
+				var source = $('#file_list_template').html();
+				var output = $('#imported_file_list');
+
+				render(source, ds, output);
+
+				$('#imported_list_modal').modal('show');
+			}
+			else {
+				swal({
+					title:'Error!',
+					text:rs,
+					type:'error'
+				});
+			}
+		},
+		error:function(xhr, status, error) {
+			load_out();
+			swal({
+				title:'Error!',
+				text: xhr.responseText,
+				type:'error'
+			});
+		}
+	})
+}
+
+
+
 function delete_imported(id)
 {
 	$.ajax({
@@ -271,7 +464,7 @@ function delete_imported(id)
 			}
 			else
 			{
-				swal("ไม่สำเร็จ", "ลบข้อมูลตั้งต้นไม่สำเร็จ", "error");	
+				swal("ไม่สำเร็จ", "ลบข้อมูลตั้งต้นไม่สำเร็จ", "error");
 			}
 		}
 	});
@@ -295,7 +488,7 @@ function close_check(id)
 						{
 							swal({ title: "เรียบร้อย", text: "ปิดการตรวจนับเรียบร้อยแล้ว", timer: 1000, type : "success"});
 							$("#btn_close"+id).remove();
-							$('<li id="btn_open'+id+'"><a href="javascript:void(0)" onclick="open_check('+id+')"><i class="fa fa-check"></i>&nbsp; เปิดการตรวจนับ</a></li>').insertBefore($("#divider"+id));	
+							$('<li id="btn_open'+id+'"><a href="javascript:void(0)" onclick="open_check('+id+')"><i class="fa fa-check"></i>&nbsp; เปิดการตรวจนับ</a></li>').insertBefore($("#divider"+id));
 							$("#status_"+id).html('<button type="button" class="btn btn-minier btn-danger"><i class="fa fa-stop"></i></button>');
 							var d = new Date();
 							var date = d.getDate()+"-"+(d.getMonth() +1)+"-"+(d.getFullYear()+543);
@@ -303,14 +496,14 @@ function close_check(id)
 						}
 						else
 						{
-							swal("ไม่สำเร็จ", "ปิดการตรวจนับไม่สำเร็จ", "error");	
+							swal("ไม่สำเร็จ", "ปิดการตรวจนับไม่สำเร็จ", "error");
 						}
 					}
 				});
 			}
 			else
 			{
-				swal("หยุดการตรวจนับก่อน", "กรุณาหยุดการตรวจนับก่อนแล้วค่อยปิดการตรวจนับ", "error");	
+				swal("หยุดการตรวจนับก่อน", "กรุณาหยุดการตรวจนับก่อนแล้วค่อยปิดการตรวจนับ", "error");
 			}
 		}
 	});
@@ -358,7 +551,7 @@ function edit_row(id)
 				$("#edit_location").val(rs[0]);
 				$("#edit_subject").val(rs[2]);
 				$("#edit_remark").val(rs[1]);
-				$("#edit_modal").modal("show");	
+				$("#edit_modal").modal("show");
 			}
 		}
 	});
@@ -414,7 +607,7 @@ function new_check()
 			var rs = $.trim(rs);
 			if(rs == "success")
 			{
-				swal({title: "สำเร็จ", text: "เพิ่มรายการใหม่เรียบร้อยแล้ว", type: "success", timer: 1000 });	
+				swal({title: "สำเร็จ", text: "เพิ่มรายการใหม่เรียบร้อยแล้ว", type: "success", timer: 1000 });
 				window.location.href = "<?php echo $this->home; ?>";
 			}
 			else
@@ -429,7 +622,7 @@ function new_check()
 function select_file(id)
 {
 	$("#id_check").val(id);
-	$("#import_modal").modal("show");	
+	$("#import_modal").modal("show");
 }
 
 function pause(id)
@@ -449,11 +642,19 @@ function pause(id)
 			}
 			else
 			{
-				swal("ไม่สำเร็จ");	
+				swal("ไม่สำเร็จ");
 			}
 		}
 	});
 }
+
+
+function select_import_checked_file(id) {
+	$('#idCheck').val(id);
+	$('#import_checked_modal').modal('show');
+}
+
+
 
 function check(id)
 {
@@ -468,11 +669,11 @@ function check(id)
 			if(rs=="success")
 			{
 				$("#btn_pause_"+id).css("display", "none");
-				$("#btn_check_"+id).css("display", "");	
+				$("#btn_check_"+id).css("display", "");
 			}
 			else if(rs=="muliticheck")
 			{
-				swal("ข้อผิดพลาด", "มีรายการอื่นเปิดอยู่ คุณต้องหยุดใช้งานรายการอื่นก่อน หากต้องการเปิดใช้งานรายการนี้", "error");	
+				swal("ข้อผิดพลาด", "มีรายการอื่นเปิดอยู่ คุณต้องหยุดใช้งานรายการอื่นก่อน หากต้องการเปิดใช้งานรายการนี้", "error");
 			}
 			else
 			{
@@ -481,18 +682,37 @@ function check(id)
 		}
 	});
 }
+
+
 function upload()
 {
 	var file = $("#user_file").val();
 	if(file == "")
-	{ 
-		swal("กรุณาเลือกไฟล์"); 
+	{
+		swal("กรุณาเลือกไฟล์");
 	}
 	else
 	{
 		$("#import_modal").modal("hide");
 		load_in();
 		$("#myform").submit();
+	}
+}
+
+
+
+function uploadChecked()
+{
+	var file = $("#checkedFile").val();
+	if(file == "")
+	{
+		swal("กรุณาเลือกไฟล์");
+	}
+	else
+	{
+		$("#import_checked_modal").modal("hide");
+		load_in();
+		$("#importForm").submit();
 	}
 }
 
@@ -510,10 +730,10 @@ function confirm_delete(id)
 		  closeOnConfirm: false
 		},
 		function(isConfirm){
-		  if (isConfirm) 
+		  if (isConfirm)
 		  {
 				delete_checked(id);
-		  } 
+		  }
 		});
 }
 
@@ -529,7 +749,7 @@ function delete_checked(id)
 			if(rs == "success")
 			{
 				swal({ title: "เรียบร้อย", text: "ลบรายการตรวจนับเรียบร้อยแล้ว", timer: 1000, type: "success"});
-				$("#row_"+id).remove();	
+				$("#row_"+id).remove();
 			}
 			else
 			{
@@ -552,12 +772,14 @@ function get_search()
 	if(txt != "" || ( from != "" && to != "") )
 	{
 		if(from != "" && to !=""){ if(!isDate(from) || !isDate(to)){ swal("วันที่ไม่ถูกต้อง"); return false; }};
-		$("#search_form").submit();		
+		$("#search_form").submit();
 	}
 }
 
 $("#from_date").datepicker({ 	format : "dd/mm/yyyy", autoclose: true, todayHighlight: true});
+
 $("#to_date").datepicker({ format : "dd/mm/yyyy", autoclose: true, todayHighlight: true });
+
 $("#user_file").ace_file_input({
 	btn_choose : 'เลือกไฟล์',
 	btn_change: 'เปลี่ยน',
@@ -569,6 +791,21 @@ $("#user_file").ace_file_input({
 
 $("#user_file").on('file.error.ace', function(ev, info) {
 	if(info.error_count['ext'] || info.error_count['mime']) swal('กรุณาเลือกไฟล์นามสกุล .csv .xls หรือ .xlsx เท่านั้น');
+	if(info.error_count['size']) swal('ขนาดไฟล์สูงสุดไม่เกิน 5 MB');
+});
+
+
+$("#checkedFile").ace_file_input({
+	btn_choose : 'เลือกไฟล์',
+	btn_change: 'เปลี่ยน',
+	droppable: true,
+	thumbnail: 'large',
+	maxSize: 5000000,//bytes
+	allowExt: ["csv"]
+});
+
+$("#checkedFile").on('file.error.ace', function(ev, info) {
+	if(info.error_count['ext'] || info.error_count['mime']) swal('กรุณาเลือกไฟล์นามสกุล .csv เท่านั้น');
 	if(info.error_count['size']) swal('ขนาดไฟล์สูงสุดไม่เกิน 5 MB');
 });
 </script>

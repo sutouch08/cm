@@ -5,6 +5,7 @@ class Main extends CI_Controller
 	public $home;
 	public $layout = "include/template";
 	public $title = "เพิ่ม/แก้ไข การตรวจนับ";
+	public $error = "";
 
 public function __construct()
 {
@@ -81,6 +82,7 @@ public function import_items()
 			"overwrite" => TRUE
 			);
 		$this->load->library("upload", $config);
+
 		if(!$this->upload->do_upload($csv)){
 			echo $this->upload->display_errors();
 		}
@@ -91,6 +93,8 @@ public function import_items()
 			$fail			= 0;
 			$update 		= 0;
 			$info = $this->upload->data();
+
+			
 			$this->load->library("excel");
 				/// read file
 				$excel = PHPExcel_IOFactory::load($info['full_path']);
@@ -140,6 +144,105 @@ public function import_items()
 		redirect($this->home);
 }
 
+
+
+
+
+public function import_checked()
+{
+	$id_check = $this->input->post("idCheck");
+
+	$csv	= 'checkedFile';
+
+	$config = array(   // initial config for upload class
+			"allowed_types" => "csv",
+			"upload_path" => $this->csv_path,
+			"file_name" => "import_checked_data",
+			"max_size" => 5120,
+			"overwrite" => TRUE
+			);
+
+		$this->load->library("upload", $config);
+
+		if(!$this->upload->do_upload($csv)){
+
+			echo $this->upload->display_errors();
+		}
+		else
+		{
+			$import	 	= 0;
+			$success	= 0;
+			$fail			= 0;
+			$update 		= 0;
+
+			$info = $this->upload->data();
+
+			$arr = array(
+				'id_check' => $id_check,
+				'file_name' => $info['client_name'],
+				'emp_name' => getEmployeeNameByIdUser($this->session->userdata("id_user"))
+			);
+
+			$id_file = $this->main_model->add_file($arr);
+
+			if(!empty($id_file))
+			{
+				$this->load->model('admin/product_model');
+				$this->load->library("csvreader");
+				$data = $this->csvreader->parse_file($info['full_path']);
+				$import	 	= 0;
+				$success	= 0;
+				$fail			= 0;
+
+				foreach($data as $rs)
+				{
+					$import++;
+					$barcode = $rs['barcode'];
+					$qty = empty($rs['qty']) ? 0 : $rs['qty'];
+
+					if( $barcode == "")
+					{
+						$skip++;
+					}
+					else if( ! $this->product_model->isExists($barcode) )
+					{
+						$item = array(
+							'id_check' => $id_check,
+							"barcode" => $barcode,
+							"qty" => $qty,
+							"id_file" => $id_file
+						);
+
+						$this->main_model->add_non_item($item);
+						$fail++;
+					}
+					else
+					{
+						$item = array(
+							'id_check' => $id_check,
+							'barcode' => $barcode,
+							'qty' => $qty,
+							'id_employee' => $this->session->userdata("id_employee"),
+							'is_import' => 1,
+							'id_file' => $id_file
+						);
+
+						$this->main_model->add_checked_detail($item);
+
+						$success++;
+					}
+				}
+			}
+			setInfo("นำเข้า ".$import." รายการ <br/> สำเร็จ ".$success." รายการ <br/> ปรับปรุง ".$update." รายการ <br/>ไม่สำเร็จ ".$fail." รายการ");
+		}
+
+		$this->main_model->set_import_detail($id_check, 1);
+
+		redirect($this->home);
+}
+
+
+
 public function delete_imported_items()
 {
 	if( $this->input->post("id_check"))
@@ -156,6 +259,10 @@ public function delete_imported_items()
 		}
 	}
 }
+
+
+
+
 public function get_data()
 {
 	$data = "fail";
@@ -170,6 +277,10 @@ public function get_data()
 	}
 	echo $data;
 }
+
+
+
+
 public function add_new_check()
 {
 	$this->load->model('admin/shop_model');
@@ -197,6 +308,8 @@ public function add_new_check()
 	echo $res;
 }
 
+
+
 public function update_check()
 {
 	$re = "fail";
@@ -216,6 +329,9 @@ public function update_check()
 	echo $re;
 }
 
+
+
+
 public function pause_check()
 {
 	$re = "fail";
@@ -230,6 +346,9 @@ public function pause_check()
 	}
 	echo $re;
 }
+
+
+
 
 public function continue_check()
 {
@@ -255,6 +374,8 @@ public function continue_check()
 	echo $re;
 }
 
+
+
 public function close_check($id)
 {
 	$rs = $this->main_model->close_check($id);
@@ -267,6 +388,9 @@ public function close_check($id)
 		echo "fail";
 	}
 }
+
+
+
 
 public function open_check($id)
 {
@@ -281,6 +405,9 @@ public function open_check($id)
 	}
 }
 
+
+
+
 public function delete_checked($id)
 {
 	$rs = $this->main_model->deleteChecked($id);
@@ -294,10 +421,15 @@ public function delete_checked($id)
 	}
 }
 
+
+
+
 public function isPause($id)
 {
 	echo $this->main_model->isPause($id);  /// 1 = pause 0 = not pause
 }
+
+
 public function clear_filter()
 {
 	$this->session->unset_userdata("main_search_text");
@@ -305,6 +437,106 @@ public function clear_filter()
 	$this->session->unset_userdata("from_date");
 	$this->session->unset_userdata("to_date");
 	redirect($this->home);
+}
+
+
+public function get_import_file_list()
+{
+	$sc  = TRUE;
+	$ds = array();
+	$error = "";
+	$id_check = $this->input->get('id_check');
+	if(!empty($id_check))
+	{
+		$qr = $this->db->where('id_check', $id_check)->get('tbl_import_detail_file');
+		if($qr->num_rows() > 0)
+		{
+			foreach($qr->result() as $rs)
+			{
+				$arr = array(
+					'id_file' => $rs->id,
+					'file_name' => $rs->file_name,
+					'emp_name' => $rs->emp_name,
+					'date_upd' => date('d-m-Y H:i:s', strtotime($rs->date_add))
+				);
+
+				array_push($ds, $arr);
+			}
+		}
+		else {
+			$arr = array(
+				'nodata' => 'nodata'
+			);
+
+			array_push($ds, $arr);
+		}
+	}
+	else
+	{
+		$sc = FALSE;
+		$error = "Invalid Check Id";
+	}
+
+	echo $sc === TRUE ? json_encode($ds) : $error;
+}
+
+
+public function delete_selected_file()
+{
+	$sc = TRUE;
+	$id_check = $this->input->post('id_check');
+	$files = $this->input->post('select_files');
+
+	if(!empty($id_check))
+	{
+		if(!empty($files))
+		{
+			$this->db->trans_begin();
+			foreach($files as $id)
+			{
+				if($sc === FALSE)
+				{
+					break;
+				}
+
+				//--- delete check detail from file id
+				if($this->main_model->delete_import_checked_detail($id_check, $id))
+				{
+					if(! $this->main_model->delete_imported_checked_file($id))
+					{
+						$sc = FALSE;
+						$this->error = "Delete file failed @file_id : {$id}";
+					}
+				}
+				else
+				{
+					$sc = FALSE;
+					$this->error = "Delete Imported details failed @file_id : {$id}";
+				}
+			}
+
+			if($sc === TRUE)
+			{
+				$this->db->trans_commit();
+			}
+			else
+			{
+				$this->db->trans_rollback();
+			}
+		}
+		else
+		{
+			$sc = FALSE;
+			$this->error = "No files selected";
+		}
+	}
+	else
+	{
+		$sc = FALSE;
+		$this->error = "Check Id not found";
+	}
+
+	echo $sc === TRUE ? 'success' : $this->error;
 }
 
 }/// endclass
