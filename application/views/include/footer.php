@@ -11,7 +11,6 @@
 					<div class="footer-content">
 						<span class="bigger-120">
 							<span class="blue bolder">โปรแกรมตรวจนับสินค้า</span>
-							&copy; Covenant Co., Ltd.
 						</span>
 
 

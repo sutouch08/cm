@@ -252,6 +252,8 @@
 </tr>
 </script>
 
+
+<script src="<?php echo base_url(); ?>scripts/beep.js"></script>
 <script>
 $("#sc").slimScroll({ position: 'left', height : '500px', railVisible: false, alwaysVisible: true});
 $("#cs").slimScroll({ position: 'left', height : '500px', railVisible: false, alwaysVisible: true});
@@ -375,6 +377,7 @@ function check_with_qty(id_check, barcode)
 				$("#btn_check").removeAttr("disabled");
 				$('#qty').reomveAttr('disabled');
 				$('#qty').val('');
+				beep();
 				swal({
 					title : "ไม่พบสินค้า",
 					text : "ไม่พบบาร์โค้ด "+barcode+" ในฐานข้อมูล คุณต้องการเพิ่ม บาร์โค้ดนี้ในฐานข้อมูลหรือไม่ ? ",
@@ -460,6 +463,7 @@ function check_without_qty(id_check, barcode)
 				$("#barcode_item").val(barcode);
 				$("#barcode").removeAttr("disabled");
 				$("#btn_check").removeAttr("disabled");
+				beep();
 				swal({
 					title : "ไม่พบสินค้า",
 					text : "ไม่พบบาร์โค้ด "+barcode+" ในฐานข้อมูล คุณต้องการเพิ่ม บาร์โค้ดนี้ในฐานข้อมูลหรือไม่ ? ",
