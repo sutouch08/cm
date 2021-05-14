@@ -5,16 +5,16 @@ class Employee extends CI_Controller
 	public $home;
 	public $layout = "include/template";
 	public $title = "เพิ่ม/แก้ไข พนักงาน";
-		
+
 	public function __construct()
 	{
 		parent:: __construct();
 		$this->home = base_url()."admin/employee";
 		$this->load->model("admin/employee_model");
 	}
-	
+
 	public function index()
-	{	
+	{
 		$emp_search	= "";
 		if($this->input->post("emp_search") != "")
 		{
@@ -42,10 +42,10 @@ class Employee extends CI_Controller
 		$data['page_title'] 		= $this->title;
 		$data['row']				= $config['per_page'];
 		$data['emp_search']	= $txt;
-		$this->pagination->initialize($config);	
+		$this->pagination->initialize($config);
 		$this->load->view($this->layout, $data);
 	}
-	
+
 	public function get_employee($id)
 	{
 		$rs = $this->employee_model->get_employee($id);
@@ -80,8 +80,8 @@ class Employee extends CI_Controller
 		$res = "fail";
 		if($this->input->post("code"))
 		{
-			$start_date 	= $this->input->post("start_date") == "" ? "" : dbDate($this->input->post("start_date"));
-			$birthday 	= $this->input->post("birthday") == "" ? "" : dbDate($this->input->post("birthday"));
+			$start_date 	= empty($this->input->post("start_date")) ? NULL : dbDate($this->input->post("start_date"));
+			$birthday 	= empty($this->input->post("birthday")) ? NULL : dbDate($this->input->post("birthday"));
 			$data = array(
 							"code" => $this->input->post("code"),
 							"first_name" => $this->input->post("first_name"),
@@ -108,7 +108,7 @@ class Employee extends CI_Controller
 				$err = 1;
 			}
 			if( !$err )
-			{				
+			{
 				$rs = $this->employee_model->add_employee($data);
 				if($rs)
 				{
@@ -132,11 +132,11 @@ class Employee extends CI_Controller
 					$res = "fail";
 					$err = 1;
 				}
-			}		
+			}
 		}
-		echo $res;	
+		echo $res;
 	}
-	
+
 	public function update()
 	{
 		if($this->input->post("id_employee"))
@@ -164,15 +164,15 @@ class Employee extends CI_Controller
 			}
 			else
 			{
-				echo "fail";	
+				echo "fail";
 			}
 		}
 		else
 		{
-			echo "missing_data";	
+			echo "missing_data";
 		}
 	}
-	
+
 	public function delete_employee($id)
 	{
 		$rs = $this->employee_model->delete_employee($id);
@@ -185,7 +185,7 @@ class Employee extends CI_Controller
 			echo "fail";
 		}
 	}
-	
+
 	public function valid_data($code, $first_name, $last_name, $id)
 	{
 		$res = "ok";
@@ -201,13 +201,13 @@ class Employee extends CI_Controller
 		}
 		echo $res;
 	}
-	
+
 	public function clear_filter()
 	{
 		$this->session->unset_userdata("emp_search");
-		$this->index();	
+		$this->index();
 	}
-	
+
 }// End class
 
 
